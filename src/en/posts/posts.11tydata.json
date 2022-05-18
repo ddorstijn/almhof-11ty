@@ -2,5 +2,5 @@
     "tags": [
         "posts"
     ],
-    "layout": "blog.njk"
+    "layout": "page.njk"
 }

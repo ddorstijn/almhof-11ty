@@ -1,0 +1,10 @@
+{%- set pageTitle %}{% if title %}{{title}} {% endif %} - {{meta.siteName}} {% endset -%}
+<title>{{pageTitle}} </title>
+<meta name="description" content="{{pageDescription}}" />
+<meta name="keywords" content="{{pageKeyword}}" />
+<meta name="creation_Date" content="{{meta.creationDate}}" />
+
+<meta name="robots" content="{{meta.robots}}" />
+<link rel="alternate" hreflang="en" href="../en">
+<link rel="alternate" hreflang="nl" href="../nl">
+<link rel="alternate" hreflang="de" href="../de">

@@ -1,11 +1,14 @@
 const fs   = require('fs');
 const yaml = require("js-yaml")
+
 const htmlmin = require("html-minifier")
 
 const addFilters = require("./src/_11ty/filters");
 const addShortcodes = require("./src/_11ty/shortcodes");
 
 const i18n = require('eleventy-plugin-i18n');
+const sitemap = require("@quasibit/eleventy-plugin-sitemap");
+
 const translations = yaml.load(fs.readFileSync('./src/_11ty/data/translations.yml', 'utf8'));
 
 module.exports = (eleventyConfig) => {
@@ -17,7 +20,8 @@ module.exports = (eleventyConfig) => {
     // Support .yaml Extension in _data
     eleventyConfig.addDataExtension("yaml", (contents) => yaml.load(contents))
 
-    // Minify HTML
+    // Transforms
+    // ---------------------------------------------------
     eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
         if (!outputPath.endsWith(".html")) return content
         
@@ -26,7 +30,7 @@ module.exports = (eleventyConfig) => {
             removeComments: true,
             collapseWhitespace: true
         })
-    })
+    });
 
     // Shortcodes & Filters
     // -----------------------------------------------------
@@ -42,9 +46,14 @@ module.exports = (eleventyConfig) => {
         }
     });
 
+    eleventyConfig.addPlugin(sitemap, {
+        sitemap: {
+            hostname: "https://almhof.netlify.com",
+        },
+    });
+
     // Passthroughs
     // -----------------------------------------------------
-    eleventyConfig.addPassthroughCopy('src/assets/js')
 
     return {
         htmlTemplateEngine: 'njk',
