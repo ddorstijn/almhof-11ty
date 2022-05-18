@@ -2,11 +2,11 @@ const fs   = require('fs');
 const yaml = require("js-yaml")
 const htmlmin = require("html-minifier")
 
-const { format } = require('date-fns')
-const { image: imageShortcode } = require('./eleventy_src/shortcodes')
+const addFilters = require("./src/_11ty/filters");
+const addShortcodes = require("./src/_11ty/shortcodes");
 
 const i18n = require('eleventy-plugin-i18n');
-const translations = yaml.load(fs.readFileSync('./src/_data/translations.yml', 'utf8'));
+const translations = yaml.load(fs.readFileSync('./src/_11ty/data/translations.yml', 'utf8'));
 
 module.exports = (eleventyConfig) => {
     // Disable automatic use of your .gitignore
@@ -28,15 +28,10 @@ module.exports = (eleventyConfig) => {
         })
     })
 
-    // Shortcodes
+    // Shortcodes & Filters
     // -----------------------------------------------------
-    eleventyConfig.addNunjucksAsyncShortcode('image', imageShortcode)
-
-    // Filters
-    // -----------------------------------------------------
-    eleventyConfig.addFilter('datefmt', (contentDate) => {
-        return format(contentDate, 'LLL do, yyyy')
-    })
+    addShortcodes(eleventyConfig);
+    addFilters(eleventyConfig);
 
     // Plugins
     // -----------------------------------------------------
@@ -56,8 +51,9 @@ module.exports = (eleventyConfig) => {
         dir: {
             input: 'src',
             output: 'public',
-            includes: '_includes',
-            layouts: '_layouts',
+            includes: '_11ty/includes',
+            layouts: '_11ty/layouts',
+            data: '_11ty/data',
         }
     }
 }
